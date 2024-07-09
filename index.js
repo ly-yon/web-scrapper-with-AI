@@ -1,5 +1,6 @@
 import main from "./main.js";
-main("https://www.centrepointstores.com/").then((res) => {
+// Change the URL Below!
+main("https://www.example.com/").then((res) => {
   // console.log(res);
   console.log(`The results are:-
     Domain:- ${res.Domain}
