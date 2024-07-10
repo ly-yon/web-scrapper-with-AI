@@ -4,13 +4,12 @@ import axios from "axios";
 import ai from "./ai_import/ai.js";
 import fs from "fs";
 import extractDomain from "extract-domain";
-
 const getQuotes = async (url) => {
   // Start a Puppeteer session with:
   // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
   // - no default viewport (`defaultViewport: null` - website page will in full width and height)
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     defaultViewport: null,
     args: [
       "--disable-dev-shm-usage",
@@ -39,7 +38,22 @@ const getQuotes = async (url) => {
 
   // Open a new page
   const page = await browser.newPage();
-
+  const client = await page.createCDPSession();
+  await client.send("Network.enable");
+  await client.send("Network.setExtraHTTPHeaders", {
+    headers: {
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
+      Dnt: "1",
+      Priority: "u=0, i",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": getUserAgent(),
+      "X-Amzn-Trace-Id": "Root=1-668e2aee-79dc210707fe0372304d2e96",
+    },
+  });
+  await client.send("Network.getAllCookies"); // This will ensure cookies are enabled
   // On this new page:
   // - open the "http://quotes.toscrape.com/" website
   // - wait until the dom content is loaded (HTML is ready)
@@ -49,6 +63,7 @@ const getQuotes = async (url) => {
     });
     await page.waitForSelector("a", { visible: false, timeout: 30000 });
   } catch (err) {
+    await browser.close();
     throw new Error("Coudn't Connet To the URL:" + url);
   }
   const { terms, policy, refund } = await page.evaluate(() => {
@@ -123,7 +138,7 @@ async function getData(url) {
         // plainText.push($("section").text().trim());
         // plainText.push($("article").text().trim());
         // plainText.push($('div[class*="container"]').text().trim());
-        plainText.push($("main").text().trim());
+        // plainText.push($("main").text().trim());
         plainText.push($("body").text().trim());
         plainText.push($("*").text().trim());
 
@@ -146,7 +161,7 @@ async function getData(url) {
 // }
 async function extractMainContent(url) {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     defaultViewport: null,
     args: [
       "--disable-dev-shm-usage",
@@ -179,17 +194,31 @@ async function extractMainContent(url) {
   await client.send("Network.enable");
   await client.send("Network.setExtraHTTPHeaders", {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
+      Dnt: "1",
+      Priority: "u=0, i",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": getUserAgent(),
+      "X-Amzn-Trace-Id": "Root=1-668e2aee-79dc210707fe0372304d2e96",
     },
   });
   await client.send("Network.getAllCookies"); // This will ensure cookies are enabled
   // On this new page:
   // - open the "http://quotes.toscrape.com/" website
   // - wait until the dom content is loaded (HTML is ready)
-  await page.goto(url, {
-    waitUntil: "networkidle0",
-  });
+  try {
+    await page.goto(url, {
+      waitUntil: "networkidle0",
+    });
+  } catch (error) {
+    console.log(error);
+    await browser.close();
+    return null;
+  }
+
   await page.waitForSelector("body", { visible: true });
   const selector = "style,script,head";
   // 2. Select and move the main content into the temporary container
@@ -275,7 +304,7 @@ async function main(url) {
         result["term"] = ai(termsData, "terms");
     }
   }
-  fs.writeFileSync("./test-terms.txt", termsData);
+  // fs.writeFileSync("./test-terms.txt", termsData);
   if (policy.length > 0) {
     policyData = await getData(policy[policy.length - 1].url);
     // console.log(policyData);
