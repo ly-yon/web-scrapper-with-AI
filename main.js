@@ -9,7 +9,7 @@ const getQuotes = async (url) => {
   // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
   // - no default viewport (`defaultViewport: null` - website page will in full width and height)
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
     args: [
       "--disable-dev-shm-usage",
@@ -161,7 +161,7 @@ async function getData(url) {
 // }
 async function extractMainContent(url) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
     args: [
       "--disable-dev-shm-usage",
