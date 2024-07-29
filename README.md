@@ -7,7 +7,7 @@ Start by Downloading Dependencies\
 ```npm install```\
 In the file Index.js , Change the URL as Desired\
 Run the Code!\
-Change in Index to use main-multi-language
+Change in Index to use main-multi-language\
 ```node ./index.js```\
 The Results Should Appear in the Console Log!\
 \
