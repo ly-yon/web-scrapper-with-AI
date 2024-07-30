@@ -62,8 +62,8 @@ I used two method's here, since one is heavy and jouisy with resources while the
 /warrenty|returns?|refund|سياس(ة|ه)|ارجاع|ا?ل?ضمان/ for refund policy\
 we did the filter on the link and also for the text placeholder\
 after that we now have a list of links that should contain useful information!\
-Here are some dificulties found when getting the link :-\
-- Sometimes the name of the page or the words in links can't be filtered.\
+Here are some dificulties found when getting the link :-
+- Sometimes the name of the page or the words in links can't be filtered.
 - There are no links in the HomePage but they exist under help section or anyother subsection!\
   To come over this problem i used the help of google to find me the right page that i need! and this was done using axios and cheerio\
   Why do we need puppeteer when there is a better efficient way to get info?\
