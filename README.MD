@@ -12,7 +12,7 @@ Run the Code!\
 Change in Index to use main-multi-language\
 Start point\
 node ./index.js\
-The Results Should Appear in the Console Log!\
+The Results Should Appear in the Console Log!
 
 # Description
 
@@ -52,7 +52,7 @@ the higher score means the higher rate of being legimate policy of the text for 
 [ 'refund', -135.6568283986262 ]\
 ]\
 giving the highest score for the terms and like this for all criteria.\
-Since the algorithm compares with similarity words and provide score based on that, the text required to have exact same as the text in memory, any conflict with other policy will lower the score or if the context is small like only having one paragragh will encounter\ with lower score and i set the system to accept only score which are above 50!\
+Since the algorithm compares with similarity words and provide score based on that, the text required to have exact same as the text in memory, any conflict with other policy will lower the score or if the context is small like only having one paragragh will encounter\ with lower score and i set the system to accept only score which are above 50!
 
 ## Getting Info from the websites
 
@@ -67,7 +67,7 @@ Here are some dificulties found when getting the link :-\
 - There are no links in the HomePage but they exist under help section or anyother subsection!\
   To come over this problem i used the help of google to find me the right page that i need! and this was done using axios and cheerio\
   Why do we need puppeteer when there is a better efficient way to get info?\
-  Well, cheerio does the work but it's only for static websites if the system encounter with a dynamic website then cheerio will not work we must use puppeteer for that.\
+  Well, cheerio does the work but it's only for static websites if the system encounter with a dynamic website then cheerio will not work we must use puppeteer for that.
 
 ## Comparing with AI
 
@@ -76,6 +76,6 @@ Also here we check for the statusCode if we get other then 200 it means there is
 ## Supporting Multi-Language
 Many websites in bahrain doesn't provide english pages, or their landing home page is in Arabic so i developed a way that we can translate the text if it wasn't in english to english text for that i used two free libraries :- franc-all, bing-translate-api\
 franc-all is a powerful library to detect the language and bing-translate-api to translate the text since this is the only reliable free option, the only limitation for bing translator that every request is limited with some length of words , so i make the text as small chunks then combined them!\
-Language problem Solved!!\
+Language problem Solved!!
 ## Finally
 the System would accept any valid URL and return with links and boolean value if it's the true policy or not!
