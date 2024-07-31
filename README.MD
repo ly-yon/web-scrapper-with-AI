@@ -30,12 +30,12 @@ categorized them in different folders :-\
 ./policy\
 Then created a json file containing all the data along with labelling them for example:-\
 [{\
-"data":"terms and condition is about todo and todo......"\
-"label":"terms"\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"data":"terms and condition is about todo and todo......"\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label":"terms"\
 },\
 {\
-"data":"privacy and policy is about todo and todo......"\
-"label":"policy"\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"data":"privacy and policy is about todo and todo......"\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label":"policy"\
 }...etc]
 
 ## Using AI to determine the text (Algorithm used is Naive Bayes)
@@ -52,9 +52,9 @@ Then we use nbc.computeOdds(newText) method where newText is the given text to c
 ]\
 the higher score means the higher rate of being legimate policy of the text for example if the text is about terms and condition, true terms! the result could be like this :-\
 [\
-[ 'terms', 250.356390789192574 ],\
-[ 'privacy', 30.8415393028331 ],\
-[ 'refund', -135.6568283986262 ]\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 'terms', 250.356390789192574 ],\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 'privacy', 30.8415393028331 ],\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 'refund', -135.6568283986262 ]\
 ]\
 giving the highest score for the terms and like this for all criteria.\
 Since the algorithm compares with similarity words and provide score based on that, the text required to have exact same as the text in memory, any conflict with other policy will lower the score or if the context is small like only having one paragragh will encounter\ with lower score and i set the system to accept only score which are above 50!
