@@ -45,13 +45,13 @@ thanks to this library wink-naive-bayes-text-classifier in JavaScript which prov
 How it works?\
 Simply first i have to load the prepered data into the memory using nbc.importJSON(labeledData) method where labeledData is json ready file and it's ready to compare with the another text will be given when comparing.\
 Then we use nbc.computeOdds(newText) method where newText is the given text to compare it with data!, this method will return the similarity score like this
-```
+`
 [
-[ 'terms', 80.356390789192574 ],
-[ 'privacy', 30.8415393028331 ],
-[ 'refund', 10.6568283986262 ]
+  [ 'terms', 80.356390789192574 ],
+  [ 'privacy', 30.8415393028331 ],
+  [ 'refund', 10.6568283986262 ]
 ]
-```
+`
 the higher score means the higher rate of being legimate policy of the text for example if the text is about terms and condition, true terms! the result could be like this :-\
 [\
 [ 'terms', 250.356390789192574 ],\
