@@ -7,7 +7,7 @@
 
 Start by Downloading Dependencies\
 npm install\
->main-multi-language.js< is the main system file will return json data\
+>main-multi-language.js> is the main system file will return json data\
 In the file Index.js , Change the URL as Desired\
 Run the Code!\
 Start point\
