@@ -92,7 +92,7 @@ const getQuotes = async (url) => {
     await browser.close();
     return { terms: [], policy: [], refund: [] };
   }
-  const { terms, policy, refund } = await page.evaluate(() => {
+  const { cart, terms, policy, refund } = await page.evaluate(() => {
     // Use querySelectorAll to select all desired elements
     const elements = document.querySelectorAll("a");
     // Extract text content from each element
@@ -104,15 +104,15 @@ const getQuotes = async (url) => {
     });
     const filtered = textContent.filter((element) => {
       if (
-        !/\bwarrenty\b|\bconditions?\b|\bterms?\b|\bpolicy\b|\breturns?\b|\brefund\b|\bwarranty\b|\bdisputes\b|\btos\b|\bprivacy\b|سياس(ة|ه)|ارجاع|خصوصي(ه|ة)|شروط|(أ|ا)حكام|ا?ل?ضمان/i.test(
+        !/\bcart\b|\bwarrenty\b|\bconditions?\b|\bterms?\b|\bpolicy\b|\breturns?\b|\brefund\b|\bwarranty\b|\bdisputes\b|\btos\b|\bprivacy\b|سياس(ة|ه)|ارجاع|خصوصي(ه|ة)|شروط|(أ|ا)حكام|سل(ة|ه)|ا?ل?ضمان/i.test(
           element.url
         ) &&
         /[a-z]/i.test(element.url)
       )
-        return /\bwarrenty\b|\bconditions?\b|\bterms?\b|\bpolicy\b|\breturns?\b|\brefund\b|\bwarranty\b|\bdisputes\b|\btos\b|\bprivacy\b|سياس(ة|ه)|ارجاع|خصوصي(ه|ة)|شروط|(أ|ا)حكام|اتفاقي(ة|ه)|ا?ل?ضمان/i.test(
+        return /\bcart\b|\bwarrenty\b|\bconditions?\b|\bterms?\b|\bpolicy\b|\breturns?\b|\brefund\b|\bwarranty\b|\bdisputes\b|\btos\b|\bprivacy\b|سياس(ة|ه)|ارجاع|خصوصي(ه|ة)|شروط|(أ|ا)حكام|اتفاقي(ة|ه)|ا?ل?ضمان|سل(ة|ه)/i.test(
           element.text
         );
-      return /\bwarrenty\b|\bconditions?\b|\bterms?\b|\bpolicy\b|\breturns?\b|\brefund\b|\bwarranty\b|\bdisputes\b|\btos\b|\bprivacy\b|سياس(ة|ه)|ارجاع|خصوصي(ه|ة)|شروط|(أ|ا)حكام|اتفاقي(ة|ه)|ا?ل?ضمان/i.test(
+      return /\bcart\b|\bwarrenty\b|\bconditions?\b|\bterms?\b|\bpolicy\b|\breturns?\b|\brefund\b|\bwarranty\b|\bdisputes\b|\btos\b|\bprivacy\b|سياس(ة|ه)|ارجاع|خصوصي(ه|ة)|شروط|(أ|ا)حكام|اتفاقي(ة|ه)|ا?ل?ضمان|سل(ة|ه)/i.test(
         element.url
       );
     });
@@ -145,10 +145,15 @@ const getQuotes = async (url) => {
         element.url
       );
     });
-    return { terms, policy, refund };
+    const cart = filtered.filter((element) => {
+      if (!/cart|سل(ة|ه)/i.test(element.url))
+        return /cart|سل(ة|ه)/i.test(element.text);
+      return /cart|سل(ة|ه)/i.test(element.url);
+    });
+    return { cart, terms, policy, refund };
   });
   await browser.close();
-  return { terms, policy, refund };
+  return { cart, terms, policy, refund };
 };
 // Start the scraping
 const getUserAgent = () => {
@@ -311,8 +316,7 @@ async function search(domain, label) {
 
     // Escape special characters in the label and match whole words
     const escapedLabel = label.replace(/ /g, "|");
-    const labelRegex = new RegExp(`\\b${escapedLabel}s?\\b`, "i");
-
+    const labelRegex = new RegExp(`${escapedLabel}`, "i");
     // 2. Check if Both Domain and Label are Present
     return domainRegex.test(text) && labelRegex.test(text);
   }
@@ -353,7 +357,8 @@ async function search(domain, label) {
       for (let i = 0; i < data.length; i++) {
         if (
           checkDomainAndLabel(data[i].href, domain, label) &&
-          checkDomain(data[i].href)
+          checkDomain(data[i].href) &&
+          data[i].title != ""
         )
           exitdata.push({ url: data[i].href, text: data[i].title });
       }
@@ -459,8 +464,16 @@ async function main(url) {
     valid: false,
     url: null,
   });
+  result.push({
+    name: "cart",
+    valid: false,
+    url: null,
+  });
   const checkDomain = new RegExp(domain, "i");
-  let { terms, policy, refund } = await getQuotes(url);
+  let { cart, terms, policy, refund } = await getQuotes(url);
+  cart = cart.filter((element) => {
+    return checkDomain.test(element.url);
+  });
   terms = terms.filter((element) => {
     return checkDomain.test(element.url);
   });
@@ -497,24 +510,39 @@ async function main(url) {
       await getresult(data, "refund", 2);
     }
   }
+  if (refund.length > 0) {
+    result[3].valid = true;
+    result[3].url = cart[0].url;
+  }
+  if (!result[3].valid) {
+    const data = await search(domain, "cart");
+    if (data.length > 0) {
+      result[3].valid = true;
+      result[3].url = data[0].url;
+    }
+  }
   return {
-    Domain: domain,
-    Errors: {
-      publicError,
-      getDataError,
-      searchError,
+    // Domain: domain,
+    // Errors: {
+    //   publicError,
+    //   getDataError,
+    //   searchError,
+    // },
+    cart: {
+      url: result[3].url ? result[3].url : null,
+      status: result[3].valid,
     },
-    Refund: {
+    refund: {
       url: result[2].url ? result[2].url : null,
-      valid: result[2].valid,
+      status: result[2].valid,
     },
-    Privacy: {
+    policy: {
       url: result[1].url ? result[1].url : null,
-      valid: result[1].valid,
+      status: result[1].valid,
     },
-    Term: {
+    term: {
       url: result[0].url ? result[0].url : null,
-      valid: result[0].valid,
+      status: result[0].valid,
     },
   };
 }
