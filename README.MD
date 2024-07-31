@@ -5,7 +5,7 @@
 
 # How to Start
 
-Start by Downloading Dependencies:-\
+Start by Downloading Dependencies:-
 ```
 npm install
 ```
