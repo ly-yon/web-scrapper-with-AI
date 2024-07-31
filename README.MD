@@ -7,9 +7,9 @@
 
 Start by Downloading Dependencies\
 npm install\
+>main-multi-language.js is the main system file will return json data\
 In the file Index.js , Change the URL as Desired\
 Run the Code!\
-Change in Index to use main-multi-language\
 Start point\
 node ./index.js\
 The Results Should Appear in the Console Log!
