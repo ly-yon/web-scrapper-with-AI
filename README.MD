@@ -77,7 +77,7 @@ Here are some dificulties found when getting the link :-
 ## Comparing with AI
 
 NOW, we have the links list, we will go through every link and get the all body tag data and compare it with AI that we created and try to get good score to accept it.\
-Also here we check for the statusCode if we get other then 200 it means there is a problem accessing the website either it's permission denied or human verification or anyother problem!\
+Also here we check for the statusCode if we get other then 200 it means there is a problem accessing the website either it's permission denied or human verification or anyother problem!
 ## Supporting Multi-Language
 Many websites in bahrain doesn't provide english pages, or their landing home page is in Arabic so i developed a way that we can translate the text if it wasn't in english to english text for that i used two free libraries :- franc-all, bing-translate-api\
 franc-all is a powerful library to detect the language and bing-translate-api to translate the text since this is the only reliable free option, the only limitation for bing translator that every request is limited with some length of words , so i make the text as small chunks then combined them!\
