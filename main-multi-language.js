@@ -30,7 +30,7 @@ const selector =
   "style,script,head,aside,footer,header,img,iframe,#header-area,#footer-area";
 const getQuotes = async (url) => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
     args: [
       "--disable-dev-shm-usage",
