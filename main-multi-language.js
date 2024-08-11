@@ -521,20 +521,20 @@ async function main(url) {
     //   searchError,
     // },
     cart: {
-      url: result[3].url ? result[3].url : null,
       status: result[3].valid,
-    },
-    refund: {
-      url: result[2].url ? result[2].url : null,
-      status: result[2].valid,
+      link: result[3].url ? result[3].url : null,
     },
     policy: {
-      url: result[1].url ? result[1].url : null,
       status: result[1].valid,
+      link: result[1].url ? result[1].url : null,
     },
     term: {
-      url: result[0].url ? result[0].url : null,
       status: result[0].valid,
+      link: result[0].url ? result[0].url : null,
+    },
+    refund: {
+      status: result[2].valid,
+      link: result[2].url ? result[2].url : null,
     },
   };
 }
