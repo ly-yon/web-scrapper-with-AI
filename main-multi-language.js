@@ -309,7 +309,7 @@ async function extractMainContent(url) {
 }
 let searchError = { code: 200, text: "OK" };
 async function search(domain, label) {
-  console.log("Entered For SEARCH! " + label);
+  // console.log("Entered For SEARCH! " + label);
   function checkDomainAndLabel(text, domain, label) {
     // 1. Construct Regular Expressions (Case-Insensitive)
     const domainRegex = new RegExp(`${domain.replace(/\./g, "\\.")}`, "i");
@@ -374,8 +374,6 @@ let result = [];
 function detect(txt) {
   const language = new LanguageDetect();
   const result = language.detect(txt, 2);
-  console.log(result);
-  console.log(franc(txt));
   if (franc(txt) == "eng") return true;
   if (
     result[0][0] == "english" ||
@@ -417,8 +415,6 @@ async function getresult(data, tag, resultIndex) {
     result[resultIndex].url = data[i].url;
     // fs.writeFileSync(`./test/${tag}.txt`, tempData ? tempData : "Not found");
     if (tempData != "" && tempData != undefined) {
-      console.log("Need to Translate the text? " + (franc(tempData) != "eng"));
-      console.log(franc(tempData));
       if (franc(tempData) != "eng") tempData = await letTranslate(tempData);
       if (ai(tempData, tag)) {
         // Here it will be the function of translate // tempData = await letTranslate(tempData)
@@ -433,10 +429,6 @@ async function getresult(data, tag, resultIndex) {
       tempData = await extractMainContent(data[i].url);
       result[resultIndex].url = data[i].url;
       if (tempData != "" && tempData != undefined) {
-        console.log(
-          "Need to Translate the text? " + (franc(tempData) != "eng")
-        );
-        console.log(franc(tempData));
         if (franc(tempData) != "eng") tempData = await letTranslate(tempData);
         if (ai(tempData, tag)) {
           result[resultIndex].valid = true;
