@@ -11,12 +11,12 @@ npm install
 ```
 `main-multi-language.js`
 is the main system file will return json data\
-In the file Index.js , Change the URL as Desired\
 Run the Code!\
 Start point
 ```
-node ./index.js
+node ./index.js $url
 ```
+Change `$url` to the actual url of e-commerce\
 The Results Should Appear in the Console Log!
 
 # Description
