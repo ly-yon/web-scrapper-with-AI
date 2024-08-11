@@ -4,5 +4,5 @@ const url = args[0];
 if (url)
   main(url).then((res) => {
     // console.log(res);
-    console.log(res);
+    console.log(JSON.stringify(res));
   });
