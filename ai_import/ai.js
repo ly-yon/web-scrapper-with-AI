@@ -1,27 +1,41 @@
-// Load Naive Bayes Text Classifier
-
-import Classifier from "wink-naive-bayes-text-classifier";
 import fs from "fs";
-// Instantiate
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import Classifier from "wink-naive-bayes-text-classifier";
 
+// Resolve the absolute path to the current directory of the script
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Construct the path to the JSON file using the absolute path
+const modelPath = join(__dirname, 'naive_bayes_model.json');
+
+// console.log(`Looking for model file at: ${modelPath}`);
+
+// Instantiate the classifier
 const nbc = Classifier();
-// 1. Load Your Labeled Data
-const labeledData = JSON.parse(
-  fs.readFileSync("./ai_import/naive_bayes_model.json", "utf-8")
-);
-// var prepText = require("wink-naive-bayes-text-classifier/src/prep-text.js");
+
+// Load labeled data from JSON file
+let labeledData;
+try {
+  labeledData = JSON.parse(fs.readFileSync(modelPath, 'utf-8'));
+} catch (error) {
+  console.error(`Failed to read JSON file: ${error.message}`);
+  process.exit(1);
+}
+
+// Import the prepText function
 import prepText from "wink-naive-bayes-text-classifier/src/prep-text.js";
+
+// Configure the classifier
 nbc.definePrepTasks([prepText]);
 nbc.defineConfig({ considerOnlyPresence: false, smoothingFactor: 0.5 });
-// labeledData.forEach((item) => {
-//   //   console.log(item);
-//   nbc.learn(item.cleanedText, item.label);
-// });
+
+// Import the JSON data into the classifier
 nbc.importJSON(labeledData);
-// const modelData = JSON.stringify(nbc.exportJSON());
-// fs.writeFileSync("naive_bayes_model.json", modelData);
 nbc.consolidate();
-// 6. Load and Use Your Model for Prediction (example)
+
+// Function to run classification
 function run(data, label) {
   const newText = data;
   const odd = nbc.computeOdds(newText)[0];
