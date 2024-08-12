@@ -90,7 +90,7 @@ const getQuotes = async (url) => {
     await page.waitForSelector("a", { visible: false, timeout: 60000 });
   } catch (err) {
     await browser.close();
-    return { terms: [], policy: [], refund: [] };
+    return { terms: [], policy: [], refund: [], cart: [] };
   }
   const { cart, terms, policy, refund } = await page.evaluate(() => {
     // Use querySelectorAll to select all desired elements
