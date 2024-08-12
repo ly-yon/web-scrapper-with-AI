@@ -13,7 +13,7 @@ function extractDomain(urlString) {
     if (url.hostname.startsWith("www.")) value = url.hostname.slice(4);
     return value;
   } catch (error) {
-    console.error("Invalid URL:", urlString);
+    // console.error("Invalid URL:", urlString);
     return null; // Or handle the error as needed
   }
 }
@@ -286,7 +286,7 @@ async function extractMainContent(url) {
       throw new Error("GOT Status while extracting data:- " + res.statusText());
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     await browser.close();
     return null;
   }
@@ -364,7 +364,7 @@ async function search(domain, label) {
       }
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   // console.log(exitdata);
   return exitdata;
@@ -398,7 +398,7 @@ async function letTranslate(txt) {
           result.push(translated.translation);
         }
       } catch (error) {
-        console.log(txt);
+        // console.log(txt);
       }
       data = "";
     }
